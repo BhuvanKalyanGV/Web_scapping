@@ -1,0 +1,25 @@
+import csv
+import json
+import requests
+import io
+from google.colab import files
+
+# Download the CSV file from the provided URL
+url = "https://drive.google.com/uc?id=13a2WyLoGxQKXbN_AIjrOogIlQKNe9uPm&export=download"
+response = requests.get(url)
+
+# Create a file-like object from the response text
+wrapped_response = io.StringIO(response.text)
+
+# Load the CSV file into a list of dictionaries
+reader = csv.DictReader(wrapped_response)
+data = [row for row in reader]
+
+# Convert the data to JSON
+json_data = json.dumps(data, indent=4)
+
+# Create a file-like object from the JSON string
+with open('data.json', 'w') as f:
+    f.write(json_data)
+
+files.download('data.json')
